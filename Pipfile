@@ -7,6 +7,8 @@ name = "pypi"
 pytest = "*"
 pytz = "*"
 pyspark = "*"
+faker = "*"
+pylint = "*"
 
 [dev-packages]
 

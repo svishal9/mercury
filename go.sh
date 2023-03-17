@@ -48,12 +48,8 @@ while true; do
         operations+=( spark-docker-tests )
         shift
         ;;
-    build-flyway-docker)
-        operations+=( build-flyway-docker )
-        shift
-        ;;
-    start-jenkins)
-        operations+=( start-jenkins )
+    spark-docker-run)
+        operations+=( spark-docker-run )
         shift
         ;;
     start-postgres)
@@ -66,10 +62,6 @@ while true; do
       ;;
     connect-to-local-postgres)
         operations+=( connect-to-local-postgres )
-        shift
-        ;;
-    run-flyway)
-        operations+=( run-flyway )
         shift
         ;;
     run)
@@ -106,12 +98,10 @@ function usage() {
     trace "    setup     Install dependencies"
     trace "    tests     Run tests"
     trace "    spark-docker-tests     Run spark docker tests"
-    trace "    start-jenkins     Start Jenkins"
+    trace "    spark-docker-run     Run spark docker run"
     trace "    start-postgres     Start Postgres"
     trace "    stop-postgres     Stop Postgres"
     trace "    connect-to-local-postgres     Connect to local Postgres"
-    trace "    build-flyway-docker     Build Flyway Docker"
-    trace "    run       Run flyway migrate"
     trace "Options are passed through to the sub-command."
 }
 
@@ -139,17 +129,13 @@ function spark-docker-tests() {
     ./scripts/spark-docker-tests.sh "${subcommand_opts[@]:+${subcommand_opts[@]}}"
 }
 
-
-function build-flyway-docker() {
-    trace "Build Flyway Docker"
-    ./scripts/build-flyway-docker.sh "${subcommand_opts[@]:+${subcommand_opts[@]}}"
+function spark-docker-run() {
+    trace "Running application in docker container"
+    ./scripts/spark-docker-run.sh "${subcommand_opts[@]:+${subcommand_opts[@]}}"
 }
 
 
-function start-jenkins() {
-    trace "Start Jenkins docker container"
-    ./scripts/start-jenkins.sh "${subcommand_opts[@]:+${subcommand_opts[@]}}"
-}
+
 
 
 function start-postgres() {
@@ -169,16 +155,9 @@ function connect-to-local-postgres() {
 }
 
 
-function run-flyway() {
-    trace "Running flyway migrate"
-    ./scripts/run-flyway.sh "${subcommand_opts[@]:+${subcommand_opts[@]}}"
-}
-
-
 function run() {
     trace "Running app"
-    pipenv run python -m \
-        generate_monthly_payslip.flask_app "${subcommand_opts[@]:+${subcommand_opts[@]}}"
+    ./scripts/run-anonymizer.sh "${subcommand_opts[@]:+${subcommand_opts[@]}}"
 }
 
 
@@ -202,11 +181,8 @@ fi
 if contains spark-docker-tests "${operations[@]}"; then
     spark-docker-tests
 fi
-if contains build-flyway-docker "${operations[@]}"; then
-    build-flyway-docker
-fi
-if contains start-jenkins "${operations[@]}"; then
-    start-jenkins
+if contains spark-docker-run "${operations[@]}"; then
+    spark-docker-run
 fi
 if contains start-postgres "${operations[@]}"; then
     start-postgres
@@ -216,9 +192,6 @@ if contains stop-postgres "${operations[@]}"; then
 fi
 if contains connect-to-local-postgres "${operations[@]}"; then
     connect-to-local-postgres
-fi
-if contains run-flyway "${operations[@]}"; then
-    run-flyway
 fi
 if contains run "${operations[@]}"; then
     run

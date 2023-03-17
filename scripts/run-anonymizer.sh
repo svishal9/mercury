@@ -1,0 +1,1 @@
+pipenv run python -m spark_app.com.thoughtworks.www.src.mercury -c ~/output/customer-pii -o ~/output/customer-anonymous-pii -e dev

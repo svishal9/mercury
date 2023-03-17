@@ -1,16 +1,16 @@
 from pathlib import Path
 
 import pytest
-from ...src.my_sample_spark_app import create_spark_context
 
+from ...src.utilities import create_spark_context, generate_dummy_customer_csv_file
 
-gdp_environment = 'local'
-etl_date = '07/05/2021'
+GDP_ENVIRONMENT = 'test'
+ETL_DATE = '16/03/2023'
 
 
 @pytest.fixture
 def get_spark_session():
-    return create_spark_context(gdp_environment=gdp_environment, etl_date=etl_date)
+    return create_spark_context(gdp_environment=GDP_ENVIRONMENT, etl_date=ETL_DATE)
 
 
 @pytest.fixture(scope='session')
@@ -20,9 +20,9 @@ def initialize_spark(request):
     base_dir = str(Path(__file__).parent / "test_data")
     output_dir = str(Path(__file__).parent.parent / "output")
     path_merchant_table = base_dir + "/retailer"
-    path_customer_table = base_dir + "/customer"
-    path_transaction_table = base_dir + "/transaction"
-    spark_session = create_spark_context(gdp_environment=gdp_environment, etl_date=etl_date)
-    yield spark_session, path_merchant_table, path_customer_table, path_transaction_table, etl_date, output_dir
+    path_customer_pii_table = base_dir + "/customer_pii"
+    spark_session = create_spark_context(gdp_environment=GDP_ENVIRONMENT, etl_date=ETL_DATE)
+    generate_dummy_customer_csv_file(path_customer_pii_table, spark_session, ETL_DATE)
+    yield spark_session, path_merchant_table, ETL_DATE, output_dir
     print('tearing down')
     spark_session.stop()
