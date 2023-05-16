@@ -8,13 +8,11 @@ from pyspark.sql import SparkSession, DataFrame, Window
 from pyspark.sql.functions import udf, row_number, col, lit
 from pyspark.sql.types import StringType, StructType, StructField
 
-from spark_app.com.thoughtworks.www.src.utils_logging import log_message
+from ..src.utils_logging import log_message
 
 MAX_RECORDS_PARQUET_FILES = 1000000
 MAX_RECORDS_CSV_FILES = 1000000
 MAX_NUMBER_OF_CUSTOMERS = 100
-
-logger = logging.getLogger('Anonymize Customer PII information')
 
 
 def create_spark_context(gdp_environment, etl_date):
@@ -111,8 +109,8 @@ def save_dictionary_to_csv_file(input_dictionary: list[dict], spark_session: Spa
     """
     write_dataframe_to_csv(
         input_dataframe=spark_session.createDataFrame(Row(**customer) for customer in input_dictionary)
-            .withColumn("etl_date", lit(etl_date))
-            .repartition("etl_date"),
+        .withColumn("etl_date", lit(etl_date))
+        .repartition("etl_date"),
         output=output)
 
 

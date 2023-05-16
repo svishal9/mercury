@@ -60,7 +60,7 @@ def get_logging_config():
 
 
 logging.config.dictConfig(get_logging_config())
-logger = logging.getLogger('Logging from Mercury')
+logger = logging.getLogger('Mercury - Anonymize Customer PII information')
 
 
 def log_message(message, log_name='mercury_app_log'):
