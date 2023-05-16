@@ -1,4 +1,3 @@
-import datetime
 import logging
 import os
 import shutil
@@ -8,7 +7,8 @@ from pyspark import Row
 from pyspark.sql import SparkSession, DataFrame, Window
 from pyspark.sql.functions import udf, row_number, col, lit
 from pyspark.sql.types import StringType, StructType, StructField
-from pytz import timezone
+
+from spark_app.com.thoughtworks.www.src.utils_logging import log_message
 
 MAX_RECORDS_PARQUET_FILES = 1000000
 MAX_RECORDS_CSV_FILES = 1000000
@@ -79,16 +79,6 @@ def execute_sql_and_register_spark_view(spark_session, sql_stmt, view_name):
     df_sql_exec = spark_session.sql(sql_stmt)
     log_message(f"Registering view {view_name}")
     df_sql_exec.createOrReplaceTempView(view_name)
-
-
-def log_message(message, log_name='mercury_app_log'):
-    """
-    Function to log message
-    :param log_name: name of log to generate
-    :param message: message to log
-    """
-    print(datetime.datetime.now(timezone('Australia/Sydney')).strftime(
-        "%Y-%m-%d %H:%M:%S") + f": {log_name} : {message}")
 
 
 def get_sql_stmt_df(table_name):
