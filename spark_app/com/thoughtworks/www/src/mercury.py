@@ -4,7 +4,7 @@ from datetime import datetime
 
 __version__ = "0.1.0"
 
-from spark_app.com.thoughtworks.www.src.utilities import logger, log_message, generate_dummy_customer_csv_file, \
+from ..src.utilities import logger, log_message, generate_dummy_customer_csv_file, \
     read_data, anonymize_customer_information, write_dataframe_to_csv, create_spark_context
 
 logger.setLevel(logging.INFO)

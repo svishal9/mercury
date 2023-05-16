@@ -1,5 +1,5 @@
-from spark_app.com.thoughtworks.www.src.mercury import run_anonymize_customer_data
-from spark_app.com.thoughtworks.www.src.utilities import read_data
+from ...src.mercury import run_anonymize_customer_data
+from ...src.utilities import read_data
 
 
 class TestsIntegrationMercury:
